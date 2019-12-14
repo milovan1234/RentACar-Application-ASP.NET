@@ -1,0 +1,71 @@
+﻿@model MyWebApp.ViewModels.NewAutomobileViewModel
+@{
+    ViewBag.Title = "Edit or Add Automobile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container my-4">
+    @using (Html.BeginForm("Save", "Automobiles", FormMethod.Post, new { @class = "form-newAuto col-12 col-sm-8 col-md-6", @enctype = "multipart/form-data" }))
+    {
+
+        <h3 class="text-light text-center font-weight-normal">Add or Edit Automobile</h3>
+        if (Session["UpdateAuto"] != null)
+        {
+            <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3">
+                <img class="img-fluid img-thumbnail my-3" src="@Model.Automobile.ImagePath" />
+            </div>
+            Session["UpdateAuto"] = null;
+        }
+        @Html.TextBoxFor(a => a.Automobile.CarBrand, new { @class = "form-control py-2 mt-3", @placeholder = "Car Brand" });
+        @Html.ValidationMessageFor(a => a.Automobile.CarBrand);
+
+        @Html.TextBoxFor(a => a.Automobile.CarModel, new { @class = "form-control py-2 mt-3", @placeholder = "Car Model" });
+        @Html.ValidationMessageFor(a => a.Automobile.CarModel);
+
+        @Html.TextBoxFor(a => a.Automobile.ProductYear, new { @type = "number", @min = "2000", @max = DateTime.Now.Year, @class = "product-year form-control py-2 mt-3" });
+        @Html.ValidationMessageFor(a => a.Automobile.ProductYear);
+
+        @Html.TextBoxFor(a => a.Automobile.Cubicase, new { @type = "number", @min = "1000", @max = "6000", @class = "cubicase form-control py-2 mt-3" });
+        @Html.ValidationMessageFor(a => a.Automobile.Cubicase);
+
+        @Html.DropDownListFor(a => a.Automobile.NumberOfDoorId, new SelectList(Model.NumberOfDoors, "Id", "NumberDoor"), "Number of Door", new { @class = "form-control py-2 mt-3" })
+        @Html.ValidationMessageFor(a => a.Automobile.NumberOfDoorId);
+
+        @Html.DropDownListFor(a => a.Automobile.CarBodyId, new SelectList(Model.CarBodies, "Id", "Body"), "Car Body", new { @class = "form-control py-2 mt-3" })
+        @Html.ValidationMessageFor(a => a.Automobile.CarBodyId);
+
+        @Html.DropDownListFor(a => a.Automobile.GearshiftId, new SelectList(Model.Gearshifts, "Id", "Shift"), "Gearshift", new { @class = "form-control py-2 mt-3" })
+        @Html.ValidationMessageFor(a => a.Automobile.GearshiftId);
+
+        @Html.HiddenFor(a => a.Automobile.Id)
+        @Html.AntiForgeryToken()
+
+        <input type="file" class="pl-2 py-2 mt-3 mb-1 text-danger" id="car-image" name="CarImage" />
+
+        <button type="submit" class="btn btn-block bg-primary font-weight-bold mt-4">Save</button>
+    }
+    @section scripts
+        {
+        @Scripts.Render("~/bundles/jqueryval")
+        @if (Session["CarMessage"] != null)
+        {
+            <script>
+                    alert('@Session["CarMessage"].ToString()');
+            </script>
+            Session["CarMessage"] = null;
+        }
+        @if (Session["New"] != null)
+        {
+            <script>
+                $(document).ready(function () {
+                    $(".product-year").attr("value", "");
+                    $(".product-year").attr("placeholder", "Product Year");
+
+                    $(".cubicase").attr("value", "");
+                    $(".cubicase").attr("placeholder", "Cubicase");
+                });
+            </script>
+        }
+    }
+</div>
+

@@ -1,0 +1,37 @@
+﻿@model MyWebApp.ViewModels.NewUserViewModel
+@{
+    ViewBag.Title = "Register Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div class="container d-flex justify-content-center mt-5">
+        @using (Html.BeginForm("Save", "Register", FormMethod.Post, new { @class = "form-login col-11 col-sm-9 col-md-6 col-lg-4", @enctype = "multipart/form-data" }))
+        {
+            <h3 class=" text-light text-center font-weight-normal">Register</h3>
+
+            @Html.TextBoxFor(c => c.User.FirstName, new { @class = "form-control py-2 mt-5", @placeholder = "First Name" });
+            @Html.ValidationMessageFor(c => c.User.FirstName)
+
+            @Html.TextBoxFor(c => c.User.LastName, new { @class = "form-control py-2 mt-3", @placeholder = "Last Name" });
+            @Html.ValidationMessageFor(c => c.User.LastName)
+
+            @Html.TextBoxFor(c => c.User.Username, new { @class = "form-control py-2 mt-3", @placeholder = "Username" });
+            @Html.ValidationMessageFor(c => c.User.Username)
+
+            @Html.PasswordFor(c => c.User.Password, new { @class = "form-control py-2 mt-3", @placeholder = "Password" });
+            @Html.ValidationMessageFor(c => c.User.Password)
+
+            @Html.TextBoxFor(c => c.User.Birthdate, new { @class = "form-control py-2 mt-3", type = "date" });
+            @Html.ValidationMessageFor(c => c.User.Birthdate)
+
+            <input type="file" class="pl-2 py-2 mt-3 text-danger" name="ImageFile" />
+
+            <button type="submit" class="btn btn-block bg-primary font-weight-bold mt-5">Register</button>
+            <hr class="bg-light mt-3" />
+            <button type="button" class="btn btn-block btn-signin-face font-weight-bold mt-3">REGISTER WITH THE FACEBOOK</button>
+
+        }
+        @section scripts
+        {
+            @Scripts.Render("~/bundles/jqueryval")
+        }
+    </div>

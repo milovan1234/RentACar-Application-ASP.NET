@@ -1,0 +1,137 @@
+﻿@model MyWebApp.ViewModels.NewRandomViewModel
+@{
+    ViewBag.Title = "Automobiles Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2 class="font-weight-bold text-center my-4">- Automobiles -</h2>
+    <div class="input-group">
+        <input type="search" class="form-control search-brand" placeholder="Search by car brand.." id="brand" name="brand" />
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-primary mx-2 btn-search">Search</button>
+        </span>
+    </div>
+    <hr />
+    @if (Model.Automobiles.Count() > 0)
+    {
+        <div class="row">
+            @for (int i = 0; i < Model.Automobiles.Count(); i++)
+            {
+                <div class="col-12 col-md-4 col-lg-3 my-3">
+                    <div class="card h-100">
+                        <img class="card-img-top" src="@Model.Automobiles.ElementAt(i).ImagePath" alt="Card Image">
+                        <div class="card-body">
+                            <p class="font-weight-bold">
+                                <span class="text-info">Car Brand: </span>@Model.Automobiles.ElementAt(i).CarBrand <br />
+                                <span class="text-info">Car Model: </span>@Model.Automobiles.ElementAt(i).CarModel <br />
+                                <span class="text-info">Product Year: </span>@Model.Automobiles.ElementAt(i).ProductYear<span>.</span> <br />
+                                <span class="text-info">Cubicase: </span>@Model.Automobiles.ElementAt(i).Cubicase<span>cm<sup>3</sup></span> <br />
+
+                                <a class="btn btn-info mt-2" href="/Automobiles/Edit/@Model.Automobiles.ElementAt(i).Id">Edit Auto</a>
+                                <a class="btn btn-success mt-2" href="/Offers/ShowOffers/@Model.Automobiles.ElementAt(i).Id">Show and Add Offer</a>
+                                <a class="btn btn-danger mt-2" href="/Automobiles/DeleteAutomobile/@Model.Automobiles.ElementAt(i).Id">Delete Offer</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <hr />
+        <div class="row">
+            <div class="w-100 text-center">
+                <button type="button" class="btn btn-sm btn-dark text-light mx-1 btn-page-prev pr-2"><i class="fas fa-caret-left"></i></button>
+                @for (int i = 0; i < Model.countPage; i++)
+                {
+                    <button type="button" btn-id="@(i+1)" class="btn btn-sm text-dark font-weight-bold mx-1 btn-page">@(i + 1)</button>
+                }
+                <button type="button" class="btn btn-sm btn-dark text-light mx-1 btn-page-next pl-2"><i class="fas fa-caret-right"></i></button>
+            </div>
+        </div>
+    }
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $(".search-brand").attr("value", '@Model.Brand');
+
+            let stringBrand = "";
+            $(".btn-search").click(function () {
+                    $.ajax({
+                    url: "AutomobilesPage?id=1&brand=" + $(".search-brand").val(),
+                    method: "GET",
+                    success: function () {
+                        window.location.replace("https://localhost:44310/Automobiles/AutomobilesPage?id=1&brand=" +  $(".search-brand").val());
+                    }
+                });
+            });
+            $(".btn-page").click(function () {
+                let button = $(this);
+                $.ajax({
+                    url: "AutomobilesPage?id=" + button.attr("btn-id") + "&brand=" + stringBrand,
+                    method: "GET",
+                    success: function () {
+                        window.location.replace("https://localhost:44310/Automobiles/AutomobilesPage?id=" + button.attr("btn-id") + "&brand=" + '@Model.Brand');
+                    }
+                });
+            });
+            let allItems = $(".btn-page");
+            function setActiveButton(index) {
+                for (let i = 0; i < allItems.length; i++) {
+                    $(allItems[i]).removeClass("btn-info");
+                    $(allItems[index]).addClass("btn-info");
+                }
+            }
+            let numOfPage = @Model.NumberOfPage;
+            console.log(numOfPage);
+            setActiveButton(numOfPage - 1);
+
+            $(".btn-page-prev").click(function () {
+                let index = null;
+                for (let i = 0; i < allItems.length; i++) {
+                    let clas = $(allItems[i]).attr("class");
+                    if (clas.includes("btn-info")) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index > 0) {
+                    $.ajax({
+                        url: "AutomobilesPage?id=" + numOfPage + "&brand=" + stringBrand,
+                        method: "GET",
+                        success: function () {
+                            window.location.replace("https://localhost:44310/Automobiles/AutomobilesPage?id=" + (numOfPage-1)+ "&brand=" + '@Model.Brand');
+                        }
+                    });
+                }
+            });
+
+            $(".btn-page-next").click(function () {
+                let index = null;
+                for (let i = 0; i < allItems.length; i++) {
+                    let clas = $(allItems[i]).attr("class");
+                    if (clas.includes("btn-info")) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index < allItems.length - 1) {
+                    $.ajax({
+                        url: "AutomobilesPage?id=" + numOfPage,
+                        method: "GET",
+                        success: function () {
+                            window.location.replace("https://localhost:44310/Automobiles/AutomobilesPage?id=" + (numOfPage+1)+ "&brand=" + '@Model.Brand');
+                        }
+                    });
+                }
+            });
+
+            $(".btn-search").click(function () {
+
+            });
+
+        });
+    </script>
+}
+

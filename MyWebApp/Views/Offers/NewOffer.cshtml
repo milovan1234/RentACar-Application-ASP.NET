@@ -1,0 +1,38 @@
+﻿@model MyWebApp.ViewModels.NewOfferViewModel
+@{
+    ViewBag.Title = "Add New Offer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="container my-4">
+        @using (Html.BeginForm("Save", "Offers", FormMethod.Post, new { @class = "form-offer col-12 col-sm-8 col-md-6", @enctype = "multipart/form-data" }))
+        {
+            <h3 class=" text-light text-center font-weight-normal">Add New Offer for <span class="text-danger">@Model.Offer.Automobile.CarBrand</span></h3>
+
+            @Html.TextBoxFor(o => o.Offer.BeginDate, new { @class = "form-control py-2 mt-3", type = "date" });
+            @Html.ValidationMessageFor(o => o.Offer.BeginDate)
+
+            @Html.TextBoxFor(o => o.Offer.DateStop, new { @class = "form-control py-2 mt-3", type = "date" });
+            @Html.ValidationMessageFor(o => o.Offer.DateStop)
+
+            @Html.TextBoxFor(o => o.Offer.PriceAtDay, new { @class = "form-control py-2 mt-3 price-day", @min = "1000", type = "number" });
+            @Html.ValidationMessageFor(o => o.Offer.PriceAtDay)
+
+            @Html.TextBoxFor(o => o.Offer.AutomobileId, new { @class = "form-control py-2 mt-3 id-value d-none", type = "number" });
+
+            <button type="submit" class="btn btn-block bg-primary font-weight-bold mt-4">Save</button>
+        }
+        @section scripts
+        {
+            @Scripts.Render("~/bundles/jqueryval")            
+            <script>
+                $(document).ready(function () {
+                    $(".price-day").attr("value", "");
+                    $(".price-day").attr("placeholder", "Prica at Day");
+
+                    $(".id-value").attr("value", "@Model.Offer.Automobile.Id");
+                });
+            </script>
+        }
+    </div>
+

@@ -1,0 +1,52 @@
+﻿@model MyWebApp.ViewModels.NewRandomViewModel
+@{
+    ViewBag.Title = "Edit or Add User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container my-4">
+    @using (Html.BeginForm("Save", "User", FormMethod.Post, new { @class = "form-editUser col-12 col-sm-8 col-md-6 text-center", @enctype = "multipart/form-data" }))
+    {
+        <h3 class=" text-light text-center font-weight-normal">Edit or Add User</h3>
+        if (Session["UpdateUser"] != null)
+        {
+            <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3">
+                <img class="img-fluid img-thumbnail my-3" src="@Model.User.ImagePath" />
+            </div>
+        }
+
+        @Html.TextBoxFor(c => c.User.FirstName, new { @class = "form-control py-2 mt-3", @placeholder = "First Name" });
+        @Html.ValidationMessageFor(c => c.User.FirstName)
+
+        @Html.TextBoxFor(c => c.User.LastName, new { @class = "form-control py-2 mt-3", @placeholder = "Last Name" });
+        @Html.ValidationMessageFor(c => c.User.LastName)
+
+        @Html.TextBoxFor(c => c.User.Username, new { @class = "form-control py-2 mt-3", @placeholder = "Username" });
+        @Html.ValidationMessageFor(c => c.User.Username)
+
+        @Html.TextBoxFor(c => c.User.Password, new { @class = "form-control py-2 mt-3", @placeholder = "Password" });
+        @Html.ValidationMessageFor(c => c.User.Password)
+
+        @Html.TextBoxFor(c => c.User.Birthdate, "{0:d}", new { @class = "form-control py-2 mt-3 birthdate" });
+        @Html.ValidationMessageFor(c => c.User.Birthdate)
+
+        @Html.HiddenFor(c => c.User.Id)
+
+        <input type="file" class="pl-2 py-2 mt-3 mb-1 text-danger" id="user-image" name="UserImage" />
+
+        <button type="submit" class="btn btn-block bg-primary font-weight-bold mt-5">Save</button>
+    }
+</div>
+
+@section scripts
+{
+    @if (Session["UpdateUser"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+                $(".birthdate").prop("disabled", true);
+            });
+        </script>
+        Session["UpdateUser"] = null;
+    }
+}

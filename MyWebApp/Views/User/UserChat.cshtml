@@ -1,0 +1,100 @@
+﻿@model MyWebApp.ViewModels.NewChatViewModel
+@{
+    ViewBag.Title = "User Chat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int id = Convert.ToInt32(Session["Id"]);
+}
+
+<div class="container">
+    <div class="form-comunications col-12 col-sm-7 col-md-6 col-lg-4 text-light my-5 text-center">
+        <div class="row bg-light">
+            <div class="p-1 border border-info w-100 text-left">
+                <img class="img-responsive user-comunications" src="@Model.UserMessage.UserTo.ImagePath" />
+                <h6 class="font-weight-bold text-dark d-inline mx-2">@Model.UserMessage.UserTo.FirstName @Model.UserMessage.UserTo.LastName</h6>
+                @if (Session["Id"] != null && Session["UserRank"].ToString() == "Admin")
+                {
+                    <i class="fas fa-ellipsis-h text-dark ml-3 fa-2x drop" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item delete-chat">Delete chat</a>
+                    </div>
+                }
+            </div>
+            <div class="border border-info w-100 text-left chat-box text-dark">
+                <ul class="list-unstyled messages text-dark">
+                    @if (Model.UserMessages != null)
+                    {
+                        foreach (var message in Model.UserMessages)
+                        {
+                            if (message.UserFromId == id)
+                            {
+                                <li class="ml-1"><span class="text-success font-weight-bold"> @(message.UserFrom.FirstName): </span>@message.Message</li>
+                            }
+                            else
+                            {
+                                <li class="ml-1"><span class="text-danger font-weight-bold"> @(message.UserFrom.FirstName): </span>@message.Message</li>
+
+                            }
+                        }
+                    }
+                </ul>
+            </div>
+            <div class="input-group border border-info">
+                <input type="text" placeholder="Your message.." id="Message" class="form-control your-messages" />
+                <span class="input-group-btn">
+                    <button class="btn btn-success send-message" type="button"><i class="fas fa-sms"></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $(".send-message").click(function () {
+                let firstNameFrom = '@Model.UserMessage.UserFrom.FirstName.ToString()';
+                let messages = $(".your-messages");
+                if ($(messages).val() != "") {
+                    $.ajax({
+                        url: "SendMessage/",
+                        method: "POST",
+                        data: {
+                            UserFromId: @Model.UserMessage.UserFromId,
+                            UserToId: @Model.UserMessage.UserToId,
+                            Message: $("#Message").val()
+                        },
+                        success: function () {
+                            $(".messages").append("<li class='ml-1'> <span class='text-success font-weight-bold'>" + firstNameFrom+ ":</span> " + messages.val() + "</li>");
+                            $(messages).val("");
+                        }
+                    });
+                }
+            });
+            let fileName = '@Model.Filename';
+            function loadMessages() {
+                let url = "@Url.Content("~/")" + "User/GetMessages";
+                $.getJSON(url, { fileName: fileName }, function (data) {
+                    items = "";
+                    $(".messages").empty();
+                    $.each(data, function (i, row) {
+                        if (row.UserFromId == @id)
+                            items += "<li class='ml-1'> <span class='text-success font-weight-bold'>" + row.UserFrom.FirstName + ":</span> " + row.Message + "</li>"
+                        else
+                            items += "<li class='ml-1'> <span class='text-danger font-weight-bold'>" + row.UserFrom.FirstName + ":</span> " + row.Message + "</li>"
+                    });
+                    $(".messages").append(items);
+                });
+            }
+            setInterval(function () {
+                loadMessages();
+            }, 1000);
+
+            $(".delete-chat").click(function () {
+                let url = "@Url.Content("~/")" + "User/DeleteChat";
+                $.getJSON(url, { fileName: fileName }, function (data) {
+                    $(".messages").empty();
+                });
+            });
+        });
+    </script>
+}

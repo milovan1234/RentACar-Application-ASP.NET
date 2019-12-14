@@ -1,0 +1,134 @@
+﻿@model MyWebApp.ViewModels.NewReservationViewModel
+@{
+    ViewBag.Title = "Reservations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int id = 0;
+}
+
+<div class="container">
+    <div class="form-yourReservation col-12 col-sm-10 col-md-8 mt-4">
+        <h4 class="text-light text-center font-weight-normal mt-4 mb-3">
+            Check Reservation
+        </h4>
+        @if (Model.Reservations.Count() > 0)
+        {
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover bg-light" id="offers">
+                    <thead>
+                        <tr>
+                            <th>Automobile</th>
+                            <th>
+                                Begin Date
+                            </th>
+                            <th>Date Stop</th>
+                            <th>Total Price</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        @foreach (var res in Model.Reservations)
+                        {
+                            <tr>
+                                <td>@res.Automobile.CarBrand  @res.Automobile.CarModel</td>
+                                <td>@res.BeginDate.ToShortDateString()</td>
+                                <td>@res.DateStop.ToShortDateString()</td>
+                                <td>@(res.TotalPrice) RSD.</td>
+                                <td class="text-center">
+                                    <button type="button" reservation-id="@id" class="btn btn-danger font-weight-bold btn-delete-res">Remove</button>
+                                </td>
+                            </tr>
+                            id++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn btn-lg btn-info btn-buy">Reservation <i class="fas fa-money-check-alt"></i></button>
+        }
+        else
+        {
+            <div class="row">
+                <div class="alert alert-warning w-100 text-center p-4">
+                    We don't have any Reservations!
+                </div>
+            </div>
+        }
+        <hr class="bg-danger my-3" />
+        <h4 class="text-light text-center font-weight-normal mt-4 mb-3">
+            Your Reservation
+        </h4>
+        @if (Model.YourReservations.Count() > 0)
+        {
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover bg-light" id="offers">
+                    <thead>
+                        <tr>
+                            <th>Automobile</th>
+                            <th>
+                                Begin Date
+                            </th>
+                            <th>Date Stop</th>
+                            <th>Total Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        @foreach (var res in Model.YourReservations)
+                        {
+                            <tr>
+                                <td>@res.Automobile.CarBrand  @res.Automobile.CarModel</td>
+                                <td>@res.BeginDate.ToShortDateString()</td>
+                                <td>@res.DateStop.ToShortDateString()</td>
+                                <td>@(res.TotalPrice) RSD.</td>
+                            </tr>
+                            id++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="alert alert-warning w-100 text-center p-4">
+                    We don't have any Reservations!
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            /*Remove item from bill*/
+            $(".btn-delete-res").click(function () {
+                let button = $(this);
+                let id = $(button).attr("reservation-id");
+                if (confirm("Do you want to remove reservation from your check?")) {
+                    $.ajax({
+                        url: "DeleteResCheck/" + parseInt(id),
+                        success: function () {
+                            alert("Successfuly deleted reservation from your check!");
+                            window.setTimeout(function () { location.reload() }, 1000);
+                        }
+                    });
+                }
+            });
+            /*Buying reservation*/
+            $(".btn-buy").click(function () {
+                let button = $(this);
+                if (confirm("Is that all you want?")) {
+                    $.ajax({
+                        url: "BuyReservation",
+                        method: "POST",
+                        success: function () {
+                            alert("Successfuly reservation!");
+                            window.setTimeout(function () { location.reload() }, 1000);
+                        }
+                    });
+                }
+
+            });
+        });
+    </script>
+}

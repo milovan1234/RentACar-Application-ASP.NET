@@ -1,0 +1,56 @@
+﻿@model MyWebApp.ViewModels.NewComunicationsViewModel
+@{
+    ViewBag.Title = "Comunications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool check = false;
+}
+<div class="container">
+    <div class="form-comunications col-12 col-sm-8 text-light my-5">
+        <h3 class=" text-light text-center font-weight-normal mb-3">Customers</h3>
+        @foreach (var user in Model.Users)
+        {
+            check = false;
+            foreach (var actUser in Model.ActiveUsers)
+            {
+                if (user.Id == actUser.Id)
+                {
+                    check = true;
+                    break;
+                }
+            }
+            if (check)
+            {
+                <div class="row my-3">
+                    <div class="border border-danger p-1 bg-light col-12 col-sm-8 col-md-8 col-lg-6">
+                        <img class="img-responsive user-comunications" src="@user.ImagePath" />
+                        <span class="ml-2 text-success"><sup><i class="fas fa-circle"></i></sup></span>
+                        <h6 class="font-weight-bold text-dark d-inline mx-2">@user.FirstName @user.LastName</h6>
+                        <a href="https://localhost:44310/User/UserChat?id=@user.Id" class="btn btn-info text-light float-right p-2 mt-1"><i class="fas fa-sms"></i></a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row my-3">
+                    <div class="border border-danger p-1 bg-light col-12 col-sm-8 col-md-8 col-lg-6">
+                        <img class="img-responsive user-comunications" src="@user.ImagePath" />
+                        <span class="ml-2 text-danger"><sup><i class="fas fa-circle"></i></sup></span>
+                        <h6 class="font-weight-bold text-dark d-inline mx-2">@user.FirstName @user.LastName</h6>                        
+                        <a href="https://localhost:44310/User/UserChat?id=@user.Id" class="btn btn-info text-light float-right p-2 mt-1"><i class="fas fa-sms"></i></a>
+                    </div>                    
+                </div>
+            }
+        }
+    </div>
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            setInterval(function () {
+                window.location.reload();
+            }, 3000);
+        });
+    </script>
+}
+

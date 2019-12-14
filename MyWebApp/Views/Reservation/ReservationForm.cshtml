@@ -1,0 +1,166 @@
+﻿@model MyWebApp.ViewModels.ShowReservationViewModel
+@{
+    ViewBag.Title = "Reservation Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="form-newAuto col-12 col-md-10 col-lg-8 my-5">
+        <h3 class="text-light text-center font-weight-normal">- Offer and Reservations -</h3>
+        <div class="row">
+            <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3">
+                <img class="img-thumbnail my-3" src="@Model.Automobile.ImagePath" />
+            </div>
+        </div>
+        <h6 class="font-weight-bold text-light text-center"><span class="text-warning">Car Model: </span>@Model.Automobile.CarModel</h6>
+        <h6 class="font-weight-bold text-light text-center"><span class="text-warning">Cubicase: </span>@(Model.Automobile.Cubicase)cm<sup>3</sup></h6>
+        <h6 class="font-weight-bold text-light text-center"><span class="text-warning">Product year: </span>@(Model.Automobile.ProductYear).</h6>
+        <h6 class="font-weight-bold text-light text-center"><span class="text-warning">Number of door: </span>@Model.Automobile.NumberOfDoor.NumberDoor</h6>
+        <h6 class="font-weight-bold text-light text-center"><span class="text-warning">Gearshift: </span>@Model.Automobile.Gearshift.Shift</h6>
+
+        <h4 class="text-light text-center font-weight-normal mt-4 mb-3">Offers</h4>
+        @if (Model.Offers.Count() > 0)
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover bg-light" id="offers">
+                    <thead>
+                        <tr>
+                            <th>
+                                Begin Date
+                                <i class="sorta fas fa-sort-up text-danger float-right fa-2x"></i>
+                                <i class="sortb fas fa-sort-down text-danger float-right d-none fa-2x"></i>
+                            </th>
+                            <th>Date Stop</th>
+                            <th>Price at Day</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        @foreach (var offer in Model.Offers)
+                        {
+                            <tr>
+                                <td>@offer.BeginDate.ToShortDateString()</td>
+                                <td>@offer.DateStop.ToShortDateString()</td>
+                                <td>@(offer.PriceAtDay) RSD.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="alert alert-warning w-100 text-center">
+                    We don't have any offers for select Automobile!
+                </div>
+            </div>
+        }
+
+        <h4 class="text-light text-center font-weight-normal mt-4 mb-3">Currently Reservations</h4>
+        @if (Model.Reservations.Count() > 0)
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover bg-light" id="offers">
+                    <thead>
+                        <tr>
+                            <th>
+                                Begin Date
+                            </th>
+                            <th>Date Stop</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        @foreach (var reserv in Model.Reservations)
+                        {
+                            <tr class="text-danger font-weight-bold">
+                                <td>@reserv.BeginDate.ToShortDateString()</td>
+                                <td>@reserv.DateStop.ToShortDateString()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="alert alert-warning w-100 text-center">
+                    We don't have any reservations for select Automobile!
+                </div>
+            </div>
+        }
+        @if (Model.Offers.Count() > 0)
+        {
+            <a href="https://localhost:44310/Reservation/NewReservation/@Model.Automobile.Id" class="btn btn-lg btn-success btn-block mt-5">Your reservation</a>
+        }
+    </div>
+</div>
+@section scripts
+{
+    <script>
+        function sortTable() {
+            let table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("table-body");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 0; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[0];
+                    y = rows[i + 1].getElementsByTagName("TD")[0];
+                    let dateX = new Date($(x).html());
+                    let dateY = new Date($(y).html());
+                    if ((dateX.getFullYear() > dateY.getFullYear()) || (dateX.getFullYear() == dateY.getFullYear() && dateX.getMonth() > dateY.getMonth()) ||
+                        (dateX.getFullYear() == dateY.getFullYear() && dateX.getMonth() == dateY.getMonth() && dateX.getDate() > dateY.getDate())) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+        function reverseTable() {
+            let table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("table-body");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 0; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[0];
+                    y = rows[i + 1].getElementsByTagName("TD")[0];
+                    let dateX = new Date($(x).html());
+                    let dateY = new Date($(y).html());
+                    if ((dateX.getFullYear() < dateY.getFullYear()) || (dateX.getFullYear() == dateY.getFullYear() && dateX.getMonth() < dateY.getMonth()) ||
+                        (dateX.getFullYear() == dateY.getFullYear() && dateX.getMonth() == dateY.getMonth() && dateX.getDate() < dateY.getDate())) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+        $(document).ready(function () {
+            let sorta = $(".sorta");
+            let sortb = $(".sortb");
+            $(sorta).click(function () {
+                sortTable();
+                $(sorta).addClass("d-none");
+                $(sortb).removeClass("d-none");
+            });
+            $(sortb).click(function () {
+                reverseTable();
+                $(sorta).removeClass("d-none");
+                $(sortb).addClass("d-none");
+            });
+        });
+    </script>
+}

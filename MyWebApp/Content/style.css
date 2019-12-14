@@ -1,0 +1,294 @@
+﻿/*Background home*/
+.img-background {
+    background: url("../Images/rentACar2.jpg");
+    background-size: 100% 100%;
+    box-shadow: inset 0 0 0 2000px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+    .img-background form {
+        background-color: #292b2c;
+        box-shadow: 0px 0px 10px #FCAA47;
+    }
+/*Navbar*/
+.nav-link {
+    font-size: 17px;
+}
+
+    .nav-link a {
+        color: white !important;
+        text-decoration: none;
+        display: inline-block;
+        transition: color 0.3s;
+    }
+
+        .nav-link a::after {
+            content: "";
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #FCAA47;
+            transition: width .3s;
+        }
+
+        .nav-link a:hover::after {
+            width: 100%;
+        }
+
+        .nav-link a:hover {
+            color: #FCAA47 !important;
+        }
+
+.img-login {
+    width: 45px;
+    height: 45px;
+}
+
+.dropdown .nav-link {
+    transition: color 0.3s;
+}
+
+    .dropdown .nav-link:hover {
+        color: #fc971d !important;
+    }
+.shop-cart a {
+    text-decoration: none;
+}
+/*Login Form*/
+.form-login {
+    background-color: #292b2c;
+    border-radius: 5px;
+    padding: 3rem;
+    box-shadow: 0px 0px 10px #FCAA47;
+    position: relative;
+}
+
+    .form-login input {
+        border-radius: 20px 20px;
+    }
+
+        .form-login input::placeholder {
+            color: #292b2c;
+        }
+
+    .form-login button {
+        border-radius: 20px 20px;
+        background-color: #FCAA47;
+        color: #292b2c;
+    }
+
+    .form-login .btn-signin:hover {
+        background-color: #fc971d;
+    }
+
+    .form-login .btn-register {
+        color: #292b2c;
+        background-color: #DAD6D6;
+    }
+
+        .form-login .btn-register:hover {
+            background-color: #c3bbbb;
+        }
+
+    .form-login .btn-signin-face {
+        background-color: #3C5A99;
+        white-space: normal;
+    }
+
+        .form-login .btn-signin-face:hover {
+            background-color: #324b81;
+        }
+
+/*Home - Photo*/
+.field-validation-error {
+    color: #d9534f !important;
+}
+
+/*Add New Automobile Form*/
+.form-newAuto {
+    background-color: #292b2c;
+    border-radius: 5px;
+    padding: 3em;
+    box-shadow: 0px 0px 10px #FCAA47;
+    position: relative;
+}
+
+    .form-newAuto input {
+        border-radius: 20px 20px;
+        margin: 0 auto;
+    }
+
+    .form-newAuto select {
+        border-radius: 20px 20px;
+        margin: 0 auto;
+    }
+
+    .form-newAuto .field-validation-error {
+        display: block;
+        text-align: center;
+    }
+
+    .form-newAuto #car-image {
+        display: block;
+        text-align: center;
+    }
+
+    .form-newAuto button {
+        border-radius: 20px 20px;
+        color: #292b2c;
+        margin: 0 auto;
+    }
+
+/*Add New Offer Form*/
+.form-offer {
+    background-color: #292b2c;
+    border-radius: 5px;
+    padding: 3em;
+    box-shadow: 0px 0px 10px #FCAA47;
+    position: relative;
+}
+
+    .form-offer input {
+        border-radius: 20px 20px;
+        margin: 0 auto;
+    }
+
+    .form-offer select {
+        border-radius: 20px 20px;
+        margin: 0 auto;
+    }
+
+    .form-offer .field-validation-error {
+        display: block;
+        text-align: center;
+    }
+
+    .form-offer button {
+        border-radius: 20px 20px;
+        color: #292b2c;
+        margin: 0 auto;
+    }
+/*Form Search*/
+.form-search {
+    background-color: #292b2c;
+    border-radius: 5px;
+    padding: 3em;
+    box-shadow: 0px 0px 10px #FCAA47;
+}
+/*Form Edit User*/
+.form-editUser {
+    background-color: #292b2c;
+    border-radius: 5px;
+    padding: 3em;
+    box-shadow: 0px 0px 10px #FCAA47;
+    position: relative;
+}
+
+    .form-editUser input {
+        border-radius: 20px 20px;
+        margin: 0 auto;
+    }
+
+    .form-editUser select {
+        border-radius: 20px 20px;
+        margin: 0 auto;
+    }
+
+    .form-editUser .field-validation-error {
+        display: block;
+        text-align: center;
+    }
+
+    .form-editUser #car-image {
+        display: block;
+        text-align: center;
+    }
+
+    .form-editUser button {
+        border-radius: 20px 20px;
+        color: #292b2c;
+        margin: 0 auto;
+    }
+/*Form New Reservation*/
+.form-newReservatio {
+    background-color: #292b2c;
+    border-radius: 5px;
+    padding: 3em;
+    box-shadow: 0px 0px 10px #FCAA47;
+    position: relative;
+}
+.form-newReservatio input {
+    border-radius: 20px 20px;
+    margin: 0 auto;
+}
+.form-newReservatio select {
+    border-radius: 20px 20px;
+    margin: 0 auto;
+}
+.form-newReservatio .field-validation-error {
+   display: block;
+   text-align: center;
+}
+.form-newReservatio #car-image {
+    display: block;
+    text-align: center;
+}
+.form-newReservatio button {
+    border-radius: 20px 20px;
+    color: #292b2c;
+    margin: 0 auto;
+}
+/*Singal Pulse*/
+.pulse {
+    animation: pulse 1s 3;
+}
+@keyframes pulse {
+    0% {
+        color: #fc971d;
+    }
+    70% {
+        color: #d9534f;
+    }
+    100% {
+        color: #fc971d;
+    }
+}
+/*Form Your Reservation*/
+.form-yourReservation {
+    background-color: #292b2c;
+    border-radius: 5px;
+    padding: 3em;
+    box-shadow: 0px 0px 10px #FCAA47;
+    position: relative;
+}
+/*Image user reservations*/
+.user-res {
+    width: 60px;
+    height: 60px;
+}
+/*Image comunications page*/
+.user-comunications {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 20px #3C5A99;
+}
+/*Form Comunications*/
+.form-comunications {
+    background-color: #292b2c;
+    border-radius: 5px;
+    padding: 3em;
+    box-shadow: 0px 0px 10px #FCAA47;
+    position: relative;
+}
+.chat-box {
+    height: 300px;
+    overflow: auto;
+}
+/*Dropdown chat*/
+.drop {
+    cursor: pointer;
+}
+.drop:hover {
+    color: #d9534f !important;
+}

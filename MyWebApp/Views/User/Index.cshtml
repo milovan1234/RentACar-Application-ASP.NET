@@ -1,0 +1,243 @@
+﻿@model  MyWebApp.ViewModels.NewRandomViewModel
+@{
+    ViewBag.Title = "All Customers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int brojac = 0;
+    int counter = 0;
+    int counter_found = 0;
+    int mod;
+    if (Model.Users.Count() >= 8)
+    {
+        mod = Model.Users.Count() % 8;
+    }
+    else
+    {
+        mod = 0;
+    }
+}
+
+<div class="container">
+    <h2 class="font-weight-bold text-center my-4">- Customers -</h2>
+    @if (Model.Users.Count() > 0)
+    {
+        <div class="container">
+            <div class="tab-content div-content" id="myTabContent">
+                @for (int i = 0; i <= Model.Users.Count(); i++)
+                {
+                    if (Model.Users.Count() < 8 && i == 0)
+                    {
+                        <div class="tab-pane fade show active" id="@i" role="tabpanel" aria-labelledby="page@i-tab">
+                            <div class="row">
+                                @for (int j = 0; j < Model.Users.Count(); j++)
+                                {
+                                    <div class="col-12 col-md-4 col-lg-3 my-3">
+                                        <div class="card h-100">
+                                            <img class="card-img-top img-fluid border-bottom border-warning" src="@Model.Users.ElementAt(j).ImagePath" alt="Card Image">
+                                            <div class="card-body bg-dark text-danger">
+                                                <p class="font-weight-bold text-center">
+                                                    @Model.Users.ElementAt(j).FirstName&nbsp;@Model.Users.ElementAt(j).LastName
+                                                </p>
+                                                <a class="btn btn-outline-warning font-weight-bold mb-2" href="../User/EditUser/@Model.Users.ElementAt(j).Id">Edit Customer</a>
+                                                <a class="btn btn-outline-primary font-weight-bold mb-2" href="../User/UsersReservation/@Model.Users.ElementAt(j).Id">Reservations</a>
+                                                <button class="btn btn-outline-danger font-weight-bold btn-user-delete px-3" user-id="@Model.Users.ElementAt(j).Id">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    counter++;
+                                }
+                            </div>
+                        </div>
+                    }
+                    else if (counter_found == 8 || i == 8)
+                    {
+                        <div class="tab-pane fade show active" id="@i" role="tabpanel" aria-labelledby="page@i-tab">
+                            <div class="row">
+                                @for (int j = 0; j < counter_found; j++)
+                                {
+                                    <div class="col-12 col-md-4 col-lg-3 my-3">
+                                        <div class="card h-100">
+                                            <img class="card-img-top img-fluid border-bottom border-warning" src="@Model.Users.ElementAt(j).ImagePath" alt="Card Image">
+                                            <div class="card-body bg-dark text-danger">
+                                                <p class="font-weight-bold text-center">
+                                                    @Model.Users.ElementAt(j).FirstName&nbsp;@Model.Users.ElementAt(j).LastName
+                                                </p>
+                                                <a class="btn btn-outline-warning font-weight-bold mb-2" href="../User/EditUser/@Model.Users.ElementAt(j).Id">Edit Customer</a>
+                                                <a class="btn btn-outline-primary font-weight-bold mb-2" href="../User/UsersReservation/@Model.Users.ElementAt(j).Id">Reservations</a>
+                                                <button class="btn btn-outline-danger font-weight-bold btn-user-delete px-3" user-id="@Model.Users.ElementAt(j).Id">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    counter++;
+                                }
+                            </div>
+                        </div>
+                        counter_found = 0;
+                    }
+                    else if (counter_found == 8)
+                    {
+                        <div class="tab-pane fade show" id="@i" role="tabpanel" aria-labelledby="page@i-tab">
+                            <div class="row">
+                                @for (int j = counter; j < i; j++)
+                                {
+                                    <div class="col-12 col-md-4 col-lg-3 my-3">
+                                        <div class="card h-100">
+                                            <img class="card-img-top img-fluid border-bottom border-warning" src="@Model.Users.ElementAt(j).ImagePath" alt="Card Image">
+                                            <div class="card-body bg-dark text-danger">
+                                                <p class="font-weight-bold text-center">
+                                                    @Model.Users.ElementAt(j).FirstName&nbsp;@Model.Users.ElementAt(j).LastName
+                                                </p>
+                                                <a class="btn btn-outline-warning font-weight-bold mb-2" href="../User/EditUser/@Model.Users.ElementAt(j).Id">Edit Customer</a>
+                                                <a class="btn btn-outline-primary font-weight-bold mb-2" href="../User/UsersReservation/@Model.Users.ElementAt(j).Id">Reservations</a>
+                                                <button class="btn btn-outline-danger font-weight-bold btn-user-delete px-3" user-id="@Model.Users.ElementAt(j).Id">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    counter++;
+                                }
+                            </div>
+                        </div>
+                        counter_found = 0;
+                    }
+                    else if (i == Model.Users.Count() && mod != 0)
+                    {
+                        <div class="tab-pane fade show" id="@i" role="tabpanel" aria-labelledby="page@i-tab">
+                            <div class="row">
+                                @for (int j = counter; j < Model.Users.Count(); j++)
+                                {
+                                    <div class="col-12 col-md-4 col-lg-3 my-3">
+                                        <div class="card h-100">
+                                            <img class="card-img-top img-fluid border-bottom border-warning" src="@Model.Users.ElementAt(j).ImagePath" alt="Card Image">
+                                            <div class="card-body bg-dark text-danger">
+                                                <p class="font-weight-bold text-center">
+                                                    @Model.Users.ElementAt(j).FirstName&nbsp;@Model.Users.ElementAt(j).LastName
+                                                </p>
+                                                <a class="btn btn-outline-warning font-weight-bold mb-2" href="../User/EditUser/@Model.Users.ElementAt(j).Id">Edit Customer</a>
+                                                <a class="btn btn-outline-primary font-weight-bold mb-2" href="../User/UsersReservation/@Model.Users.ElementAt(j).Id">Reservations</a>
+                                                <button class="btn btn-outline-danger font-weight-bold btn-user-delete px-3" user-id="@Model.Users.ElementAt(j).Id">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    counter++;
+                                }
+                            </div>
+                        </div>
+                        counter_found = 0;
+                    }
+                    counter_found++;
+                }
+            </div>
+            @{
+                counter_found = 0;
+            }
+            <ul class="nav nav-pills my-3 ul-item" id="myTab" role="tablist">
+                <li class="nav-item prev">
+                    <a class="nav-link text-light mr-2 bg-dark"><i class="fas fa-caret-left"></i></a>
+                </li>
+                @for (int i = 0; i <= Model.Users.Count(); i++)
+                {
+                    if (Model.Users.Count() < 8 && i == 0)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link active li-item" id="page@i-tab" data-toggle="tab" href="#@i" role="tab" aria-controls="@i" aria-selected="true">@(++brojac)</a>
+                        </li>
+                    }
+                    else if (counter_found == 8 || i == 8)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link active li-item" id="page@i-tab" data-toggle="tab" href="#@i" role="tab" aria-controls="@i" aria-selected="true">@(++brojac)</a>
+                        </li>
+                        counter_found = 0;
+                    }
+                    else if (counter_found == 8)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link li-item" id="page@i-tab" data-toggle="tab" href="#@i" role="tab" aria-controls="@i" aria-selected="true">@(++brojac)</a>
+                        </li>
+                        counter_found = 0;
+                    }
+                    else if (i == Model.Users.Count() && mod != 0)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link li-item" id="page@i-tab" data-toggle="tab" href="#@i" role="tab" aria-controls="@i" aria-selected="true">@(++brojac)</a>
+                        </li>
+                    }
+                    counter_found++;
+                }
+                <li class="nav-item next">
+                    <a class="nav-link text-light ml-2 bg-dark"><i class="fas fa-caret-right"></i></a>
+                </li>
+            </ul>
+        </div>
+    }
+    else
+    {
+        <div class="container">
+            <div class="alert alert-danger p-4 font-weight-bold text-center">
+                There is no such a car in offer!
+            </div>
+        </div>
+    }
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+            let allDivItems = $(".div-content .tab-pane");
+
+            let allItems = $(".ul-item .li-item");
+            let prev = $(".ul-item .prev");
+            let next = $(".ul-item .next");
+            for (let i = 0; i < allItems.length; i++) {
+                $(allItems[i]).removeClass("active");
+                $(allItems[0]).addClass("active");
+            }
+            $(prev).click(function () {
+                let index = null;
+                for (let i = 0; i < allItems.length; i++) {
+                    let clas = $(allItems[i]).attr("class");
+                    if (clas.includes("active")) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index > 0) {
+                    $(allItems[index]).removeClass("active");
+                    $(allItems[index - 1]).addClass("active");
+                    $(allDivItems[index]).removeClass("active");
+                    $(allDivItems[index - 1]).addClass("active").addClass("show");
+                }
+            });
+            $(next).click(function () {
+                let index = null;
+                for (let i = 0; i < allItems.length; i++) {
+                    let clas = $(allItems[i]).attr("class");
+                    if (clas.includes("active")) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index < allItems.length - 1) {
+                    $(allItems[index]).removeClass("active");
+                    $(allItems[index + 1]).addClass("active");
+                    $(allDivItems[index]).removeClass("active");
+                    $(allDivItems[index + 1]).addClass("active").addClass("show");
+                }
+            });
+            $(".btn-user-delete").click(function () {
+                let button = $(this);
+                if (confirm("Do you want to delete user?")) {
+                    $.ajax({
+                        url: "/api/user/" + button.attr("user-id"),
+                        method: "DELETE",
+                        success: function () {
+                            alert("Successfully deleted user!");
+                            window.setTimeout(function () { location.reload() }, 1000);
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+}

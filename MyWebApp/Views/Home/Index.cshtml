@@ -1,0 +1,356 @@
+﻿@model MyWebApp.ViewModels.NewRandomViewModel
+@{
+    ViewBag.Title = "Home Page";
+    int brojac = 0;
+    int counter = 0;
+    int counter_found = 0;
+    int mod;
+    if (Model.Automobiles.Count() >= 8)
+    {
+        mod = Model.Automobiles.Count() % 8;
+    }
+    else
+    {
+        mod = 0;
+    }
+}
+
+
+
+<div class="img-background w-100">
+    <div class="p-5">
+        @using (Html.BeginForm("FullSearch", "Home", FormMethod.Post, new { @class = "form-search col-12 col-sm-8 col-md-7 p-4 text-light", @enctype = "multipart/form-data" }))
+        {
+            <h3 class="text-light text-center font-weight-normal">Search Offers</h3>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    @Html.DropDownListFor(a => a.Automobile.CarBrand, new SelectList(Model.SearchesAutos.Select(a => a.CarBrand).Distinct(), "CarBrand"), "Car Brand", new { @class = "form-control py-2 mt-3 car-brand" })
+                </div>
+                <div class="form-group col-md-4">
+                    @Html.DropDownListFor(a => a.Automobile.CarModel, new SelectList(Model.SearchesAutos.Select(a => a.CarModel).Distinct(), "CarModel"), "Car Model", new { @class = "form-control py-2 mt-3 car-model" })
+                </div>
+                <div class="form-group col-md-4">
+                    @Html.DropDownListFor(a => a.Automobile.ProductYear, new SelectList(Model.SearchesAutos.Select(a => a.ProductYear).Distinct(), "ProductYear"), "Product Year", new { @class = "form-control py-2 mt-3 car-product-year" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    @Html.DropDownListFor(a => a.Automobile.Cubicase, new SelectList(Model.SearchesAutos.Select(a => a.Cubicase).Distinct(), "Cubicase"), "Cubicase - cm3", new { @class = "form-control py-2 mt-3 car-cubicase" })
+                </div>
+                <div class="form-group col-md-4">
+                    @Html.DropDownListFor(a => a.Automobile.NumberOfDoorId, new SelectList(Model.NumberOfDoors, "Id", "NumberDoor"), "Number of Doors", new { @class = "form-control py-2 mt-3 car-door" })
+                </div>
+                <div class="form-group col-md-4">
+                    @Html.DropDownListFor(a => a.Automobile.CarBodyId, new SelectList(Model.CarBodies, "Id", "Body"), "Car Body", new { @class = "form-control py-2 mt-3" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    @Html.DropDownListFor(a => a.Automobile.GearshiftId, new SelectList(Model.Gearshifts, "Id", "Shift"), "Gearshift", new { @class = "form-control py-2 mt-3" })
+                </div>
+            </div>
+            <button type="submit" class="btn btn-lg btn-info">Search <i class="fas fa-search"></i></button>
+        }
+    </div>
+</div>
+
+<h2 class="font-weight-bold text-center my-4">- Offers -</h2>
+
+<div class="container">
+    @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { @class = "col-md-4 mb-5", @enctype = "multipart/form-data" }))
+    {
+        <div class="input-group">
+            <input type="search" class="form-control input-search" id="brand" name="brand" placeholder="Search by Brand..." />&nbsp;
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-info btn-search">Search <i class="fas fa-search"></i></button>
+            </span>
+        </div>
+    }
+</div>
+
+@if (Model.Automobiles.Count() > 0)
+{
+    <div class="container">
+        <div class="tab-content div-content" id="myTabContent">
+            @for (int i = 0; i <= Model.Automobiles.Count(); i++)
+            {
+                if (Model.Automobiles.Count() < 8 && i == 0)
+                {
+                    <div class="tab-pane fade show active" id="@i" role="tabpanel" aria-labelledby="page@i-tab">
+                        <div class="row">
+                            @for (int j = 0; j < Model.Automobiles.Count(); j++)
+                            {
+                                <div class="col-12 col-md-4 col-lg-3 my-3">
+                                    <div class="card h-100">
+                                        <img class="card-img-top" src="@Model.Automobiles.ElementAt(j).ImagePath" alt="Card Image">
+                                        <div class="card-body">
+                                            <p class="font-weight-bold">
+                                                <span class="text-info">Car Brand: </span>@Model.Automobiles.ElementAt(j).CarBrand <br />
+                                                <span class="text-info">Car Model: </span>@Model.Automobiles.ElementAt(j).CarModel <br />
+                                                <span class="text-info">Product Year: </span>@Model.Automobiles.ElementAt(j).ProductYear<span>.</span> <br />
+                                                <span class="text-info">Cubicase: </span>@Model.Automobiles.ElementAt(j).Cubicase<span>cm<sup>3</sup></span> <br />
+
+                                                @if (Session["Id"] != null && Session["UserRank"].ToString() == "Admin")
+                                                {
+                                                    <a class="btn btn-info mt-2" href="/Offers/ShowOffers/@Model.Automobiles.ElementAt(j).Id">Edit Offers</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-success mt-2" href="/Reservation/ReservationPage/@Model.Automobiles.ElementAt(j).Id">Reservation</a>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                counter++;
+                            }
+                        </div>
+                    </div>
+                }
+                else if (counter_found == 8 || i == 8)
+                {
+                    <div class="tab-pane fade show active" id="@i" role="tabpanel" aria-labelledby="page@i-tab">
+                        <div class="row">
+                            @for (int j = 0; j < counter_found; j++)
+                            {
+                                <div class="col-12 col-md-4 col-lg-3 my-3">
+                                    <div class="card h-100">
+                                        <img class="card-img-top" src="@Model.Automobiles.ElementAt(j).ImagePath" alt="Card Image">
+                                        <div class="card-body">
+                                            <p class="font-weight-bold">
+                                                <span class="text-info">Car Brand: </span>@Model.Automobiles.ElementAt(j).CarBrand <br />
+                                                <span class="text-info">Car Model: </span>@Model.Automobiles.ElementAt(j).CarModel <br />
+                                                <span class="text-info">Product Year: </span>@Model.Automobiles.ElementAt(j).ProductYear<span>.</span> <br />
+                                                <span class="text-info">Cubicase: </span>@Model.Automobiles.ElementAt(j).Cubicase<span>cm<sup>3</sup></span> <br />
+
+                                                @if (Session["Id"] != null && Session["UserRank"].ToString() == "Admin")
+                                                {
+                                                    <a class="btn btn-info mt-2" href="/Offers/ShowOffers/@Model.Automobiles.ElementAt(j).Id">Edit Offers</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-success mt-2" href="/Reservation/ReservationPage/@Model.Automobiles.ElementAt(j).Id">Reservation</a>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                counter++;
+                            }
+                        </div>
+                    </div>
+                    counter_found = 0;
+                }
+                else if (counter_found == 8)
+                {
+                    <div class="tab-pane fade show" id="@i" role="tabpanel" aria-labelledby="page@i-tab">
+                        <div class="row">
+                            @for (int j = counter; j < i; j++)
+                            {
+                                <div class="col-12 col-md-4 col-lg-3 my-3">
+                                    <div class="card h-100">
+                                        <img class="card-img-top" src="@Model.Automobiles.ElementAt(j).ImagePath" alt="Card Image">
+                                        <div class="card-body">
+                                            <p class="font-weight-bold">
+                                                <span class="text-info">Car Brand: </span>@Model.Automobiles.ElementAt(j).CarBrand <br />
+                                                <span class="text-info">Car Model: </span>@Model.Automobiles.ElementAt(j).CarModel <br />
+                                                <span class="text-info">Product Year: </span>@Model.Automobiles.ElementAt(j).ProductYear<span>.</span> <br />
+                                                <span class="text-info">Cubicase: </span>@Model.Automobiles.ElementAt(j).Cubicase<span>cm<sup>3</sup></span> <br />
+
+                                                @if (Session["Id"] != null && Session["UserRank"].ToString() == "Admin")
+                                                {
+                                                    <a class="btn btn-info mt-2" href="/Offers/ShowOffers/@Model.Automobiles.ElementAt(j).Id">Edit Offers</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-success mt-2" href="/Reservation/ReservationPage/@Model.Automobiles.ElementAt(j).Id">Reservation</a>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                counter++;
+                            }
+                        </div>
+                    </div>
+                    counter_found = 0;
+                }
+                else if (i == Model.Automobiles.Count() && mod != 0)
+                {
+                    <div class="tab-pane fade show" id="@i" role="tabpanel" aria-labelledby="page@i-tab">
+                        <div class="row">
+                            @for (int j = counter; j < Model.Automobiles.Count(); j++)
+                            {
+                                <div class="col-12 col-md-4 col-lg-3 my-3">
+                                    <div class="card h-100">
+                                        <img class="card-img-top" src="@Model.Automobiles.ElementAt(j).ImagePath" alt="Card Image">
+                                        <div class="card-body">
+                                            <p class="font-weight-bold">
+                                                <span class="text-info">Car Brand: </span>@Model.Automobiles.ElementAt(j).CarBrand <br />
+                                                <span class="text-info">Car Model: </span>@Model.Automobiles.ElementAt(j).CarModel <br />
+                                                <span class="text-info">Product Year: </span>@Model.Automobiles.ElementAt(j).ProductYear<span>.</span> <br />
+                                                <span class="text-info">Cubicase: </span>@Model.Automobiles.ElementAt(j).Cubicase<span>cm<sup>3</sup></span> <br />
+
+                                                @if (Session["Id"] != null && Session["UserRank"].ToString() == "Admin")
+                                                {
+                                                    <a class="btn btn-info mt-2" href="/Offers/ShowOffers/@Model.Automobiles.ElementAt(j).Id">Edit Offers</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-success mt-2" href="/Reservation/ReservationPage/@Model.Automobiles.ElementAt(j).Id">Reservation</a>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                counter++;
+                            }
+                        </div>
+                    </div>
+                    counter_found = 0;
+                }
+                counter_found++;
+            }
+        </div>
+        @{
+            counter_found = 0;
+        }
+        <ul class="nav nav-pills my-3 ul-item" id="myTab" role="tablist">
+            <li class="nav-item prev">
+                <a class="nav-link text-light mr-2 bg-dark"><i class="fas fa-caret-left"></i></a>
+            </li>
+            @for (int i = 0; i <= Model.Automobiles.Count(); i++)
+            {
+                if (Model.Automobiles.Count() < 8 && i == 0)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link active li-item" id="page@i-tab" data-toggle="tab" href="#@i" role="tab" aria-controls="@i" aria-selected="true">@(++brojac)</a>
+                    </li>
+                }
+                else if (counter_found == 8 || i == 8)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link active li-item" id="page@i-tab" data-toggle="tab" href="#@i" role="tab" aria-controls="@i" aria-selected="true">@(++brojac)</a>
+                    </li>
+                    counter_found = 0;
+                }
+                else if (counter_found == 8)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link li-item" id="page@i-tab" data-toggle="tab" href="#@i" role="tab" aria-controls="@i" aria-selected="true">@(++brojac)</a>
+                    </li>
+                    counter_found = 0;
+                }
+                else if (i == Model.Automobiles.Count() && mod != 0)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link li-item" id="page@i-tab" data-toggle="tab" href="#@i" role="tab" aria-controls="@i" aria-selected="true">@(++brojac)</a>
+                    </li>
+                }
+                counter_found++;
+            }
+            <li class="nav-item next">
+                <a class="nav-link text-light ml-2 bg-dark"><i class="fas fa-caret-right"></i></a>
+            </li>
+        </ul>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="alert alert-danger p-4 font-weight-bold text-center">
+            There is no such a car in offer!
+        </div>
+    </div>
+}
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+            let allDivItems = $(".div-content .tab-pane");
+
+            let allItems = $(".ul-item .li-item");
+            let prev = $(".ul-item .prev");
+            let next = $(".ul-item .next");
+            for (let i = 0; i < allItems.length; i++) {
+                $(allItems[i]).removeClass("active");
+                $(allItems[0]).addClass("active");
+            }
+            $(prev).click(function () {
+                let index = null;
+                for (let i = 0; i < allItems.length; i++) {
+                    let clas = $(allItems[i]).attr("class");
+                    if (clas.includes("active")) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index > 0) {
+                    $(allItems[index]).removeClass("active");
+                    $(allItems[index - 1]).addClass("active");
+                    $(allDivItems[index]).removeClass("active");
+                    $(allDivItems[index - 1]).addClass("active").addClass("show");
+                }
+            });
+            $(next).click(function () {
+                let index = null;
+                for (let i = 0; i < allItems.length; i++) {
+                    let clas = $(allItems[i]).attr("class");
+                    if (clas.includes("active")) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index < allItems.length - 1) {
+                    $(allItems[index]).removeClass("active");
+                    $(allItems[index + 1]).addClass("active");
+                    $(allDivItems[index]).removeClass("active");
+                    $(allDivItems[index + 1]).addClass("active").addClass("show");
+                }
+            });
+        });
+    </script>
+    <script>
+         $(document).ready(function () {
+                    //$(".car-model").prop("disabled", true);
+                    $(".car-brand").change(function () {
+                        let num = $(this);
+                        console.log($(num).val());
+                        if ($(num).val() != "") {
+                            let url = "@Url.Content("~/")" + "Automobiles/ModelForSpecialBrand";
+                            let ddlsource = ".car-brand";
+                            let items = "";
+                            $.getJSON(url, { brand: $(ddlsource).val().toString() }, function (data) {
+                                items = "";
+                                $(".car-model").empty();
+                                items += "<option value='0'>Car Model</option>";
+                                $.each(data, function (i, row) {
+                                    console.log(row);
+                                    items += "<option>" + row.Text + "</option>";
+                                });
+                                $(".car-model").html(items);
+                            });
+                        }
+                        else {
+                            let url = "@Url.Content("~/")" + "Automobiles/ModelForSpecialBrand";
+                            let ddlsource = ".car-brand";
+                            let items = "";
+                            $.getJSON(url, { brand: $(ddlsource).val().toString() }, function (data) {
+                                items = "";
+                                $(".car-model").empty();
+                                items += "<option value='0'>Car Model</option>";
+                                $.each(data, function (i, row) {
+                                    console.log(row);
+                                    items += "<option>" + row.Text + "</option>";
+                                });
+                                $(".car-model").html(items);
+                            });
+                            //items = "<option>Car Model</option>";
+                            //$(".car-model").html(items);
+                        }
+                    });
+                });
+    </script>
+}

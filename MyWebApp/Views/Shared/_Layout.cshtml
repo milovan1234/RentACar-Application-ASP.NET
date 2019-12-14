@@ -1,0 +1,138 @@
+﻿@{ 
+    if (Session["CountChart"] == null)
+    {
+        Session["CountChart"] = "0";
+    }    
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="icon" href="~/Images/car-icon.png" />
+
+</head>
+<body class="p-0">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-1">
+        @if (Session["Id"] != null)
+        {
+            <a class="navbar-brand" href="~/">
+                <img class="rounded-circle img-login user-photo-nav" src="@Session["ImagePath"]" />
+            </a>
+        }
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                @if (Session["Id"] != null && Session["UserRank"].ToString() == "Customer")
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Profile
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item disabled">Sign in as <span class="font-weight-bold text-danger">@Session["Username"].ToString()</span></a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="https://localhost:44310/User/YourProfile">Your profile</a>
+                            <a class="dropdown-item" href="https://localhost:44310/Reservation/ValidReservation">Your Reservations</a>
+                        </div>
+                    </li>
+                    <li class="nav-item mx-1 px-2">
+                        <span class="nav-link">
+                            <a href="https://localhost:44310/User/CustomerComunications">Comunications</a>
+                        </span>
+                    </li>
+                }
+                <li class="nav-item mx-1 px-2">
+                    <span class="nav-link">@Html.ActionLink("Home", "Index", "Home")</span>
+                </li>
+                <li class="nav-item mx-1 px-2">
+                    <span class="nav-link">@Html.ActionLink("About", "About", "Home")</span>
+                </li>
+                <li class="nav-item mx-1 px-2">
+                    <span class="nav-link">@Html.ActionLink("Contact", "Contact", "Home")</span>
+                </li>
+                @if (Session["Id"] != null && Session["UserRank"].ToString() == "Admin")
+                {
+                    <li class="nav-item mx-1 px-2">
+                        <span class="nav-link">
+                            <a href="https://localhost:44310/User/AdminComunications">Comunications</a>
+                        </span>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Working with Data
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="https://localhost:44310/Automobiles/New">Add New Auto</a>
+                            <a class="dropdown-item" href="https://localhost:44310/Automobiles/AllAutomobiles">All Automobiles</a>
+                            <a class="dropdown-item" href="https://localhost:44310/User/NewUser">Add New User</a>
+                            <a class="dropdown-item" href="https://localhost:44310/User/AllCustomers">All Customers</a>
+                            <a class="dropdown-item text-danger" href="https://localhost:44310/Automobiles/AutomobilesPage?id=1">Automobiles Page</a>
+                        </div>
+                    </li>
+
+                }
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                @if (Session["Id"] == null)
+                {
+                    <li class="nav-item mx-1 px-2">
+                        <span class="nav-link">@Html.ActionLink("Login", "Index", "Login")</span>
+                    </li>
+                    <li class="nav-item mx-1 px-2">
+                        <span class="nav-link">@Html.ActionLink("Register", "Index", "Register")</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item px-2">
+                        <span class="nav-link">
+                            <a href="https://localhost:44310/Login/Logout">
+                                Logout, @Session["FirstName"] <i class="fas fa-sign-out-alt m-1"></i>
+                            </a>
+                        </span>
+                    </li>
+                    if (Session["UserRank"].ToString() == "Customer")
+                    {
+                        <li class="nav-item">
+                            <span class="p-2 m-1 shop-cart">
+                                <a href="https://localhost:44310/Reservation/YourReservations"><i class="fas fa-shopping-cart fa-2x text-warning"></i><sup><h5 class="d-inline pl-1 text-danger">@Session["CountChart"]</h5></sup></a>
+                            </span>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </nav>
+    @RenderBody()
+    <footer class="p-4 mt-5 bg-dark text-light text-center">
+        <p class="p-0 m-0">&copy; @DateTime.Now.Year - Rent a Car Application</p>
+    </footer>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    @if (Session["NewReservation"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+                $(".fa-shopping-cart").addClass("pulse");
+            });
+        </script>
+        Session["NewReservation"] = null;
+    }
+    
+</body>
+</html>

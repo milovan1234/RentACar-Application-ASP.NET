@@ -1,0 +1,85 @@
+﻿@model MyWebApp.ViewModels.NewRandomViewModel
+@{
+    ViewBag.Title = "Your Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container my-4">
+    @using (Html.BeginForm("SaveData", "User", FormMethod.Post, new { @class = "form-editUser col-12 col-sm-8 col-md-6 text-center", @enctype = "multipart/form-data" }))
+    {
+        <h3 class=" text-light text-center font-weight-normal">Your Profile</h3>
+        <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3">
+            <img class="img-fluid rounded-circle my-3 user-photo" src="@Model.User.ImagePath" />
+        </div>
+        <button type="button" class="btn btn-primary d-block my-1 font-weight-bold delete-user-photo" user-id="@Model.User.Id">Delete Photo</button>
+
+        @Html.LabelFor(u => u.User.FirstName, new { @class = "text-warning mt-3" })
+        @Html.TextBoxFor(u => u.User.FirstName, new { @class = "form-control py-2", @placeholder = "First Name" });
+        @Html.ValidationMessageFor(u => u.User.FirstName)
+
+        @Html.LabelFor(u => u.User.LastName, new { @class = "text-warning mt-3" })
+        @Html.TextBoxFor(u => u.User.LastName, new { @class = "form-control py-2", @placeholder = "Last Name" });
+        @Html.ValidationMessageFor(u => u.User.LastName)
+
+        @Html.LabelFor(u => u.User.Username, new { @class = "text-warning mt-3" })
+        @Html.TextBoxFor(u => u.User.Username, new { @class = "form-control py-2", @placeholder = "Username" });
+        @Html.ValidationMessageFor(u => u.User.Username)
+
+        @Html.LabelFor(u => u.User.Password, new { @class = "text-warning mt-3" })
+        <span class="text-danger pass mx-3"><i class="fas fa-eye"></i></span>
+        @Html.TextBoxFor(u => u.User.Password, new { @class = "form-control py-2 password", @placeholder = "Password", @type = "password" });
+        @Html.ValidationMessageFor(u => u.User.Password)
+
+        @Html.LabelFor(u => u.User.Birthdate, new { @class = "text-warning mt-3" })
+        @Html.TextBoxFor(u => u.User.Birthdate, "{0:d}", new { @class = "form-control py-2 birthdate" });
+        @Html.ValidationMessageFor(u => u.User.Birthdate)
+
+        @Html.HiddenFor(u => u.User.Id)
+
+        <input type="file" class="pl-2 py-2 mt-4 mb-1 text-danger d-block" id="user-image" name="UserImage" />
+        <button type="submit" class="btn btn-block bg-primary font-weight-bold mt-5">Save Data</button>
+    }
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $(".pass").click(function () {
+                if ($(".password").attr("type") == "password") {
+                    $(".password").attr("type", "text");
+                    $(".pass .fas").removeClass("fa-eye");
+                    $(".pass .fas").addClass("fa-eye-slash");
+                } else {
+                    $(".password").attr("type", "password");
+                    $(".pass .fas").removeClass("fa-eye-slash");
+                    $(".pass .fas").addClass("fa-eye");
+                }
+            });
+            $(".birthdate").prop("disabled", true);
+
+            $(".delete-user-photo").click(function () {
+                let button = $(this);
+                if (confirm("Do you want to delete your photo?")) {
+                    $.ajax({
+                        url: "DeleteUserPhoto/" + button.attr("user-id"),
+                        method: "PUT",
+                        success: function () {
+                            alert("Successfuly delete your photo!");
+                            window.setTimeout(function () { location.reload() }, 1000);
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+    @if (Session["UpdateUser"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+                alert("Successfuly update user data!");
+            });
+        </script>
+        Session["UpdateUser"] = null;
+    }
+}

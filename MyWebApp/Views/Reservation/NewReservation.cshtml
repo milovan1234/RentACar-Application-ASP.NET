@@ -1,0 +1,194 @@
+﻿@model MyWebApp.ViewModels.NewReservationViewModel
+@{
+    ViewBag.Title = "New Reservation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container my-4">
+
+    @using (Html.BeginForm("Save", "Reservation", FormMethod.Post, new { @class = "form-newReservatio col-12 col-sm-8 col-md-6 text-center", @enctype = "multipart/form-data" }))
+    {
+        <h4 class="text-light text-left font-weight-normal mt-4 mb-3">
+            Offers
+            <i class="fas fa-caret-up mx-2 caret-t" data-toggle="collapse" data-target="#offer"></i>
+            <i class="fas fa-caret-down d-none mx-2 caret-d" data-toggle="collapse" data-target="#offer"></i>
+        </h4>
+        <div class="table-responsive show" id="offer">
+            <table class="table table-bordered table-hover bg-light" id="offers">
+                <thead>
+                    <tr>
+                        <th>
+                            Begin Date
+                            <i class="sorta fas fa-sort-up text-danger float-right fa-2x"></i>
+                            <i class="sortb fas fa-sort-down text-danger float-right d-none fa-2x"></i>
+                        </th>
+                        <th>Date Stop</th>
+                        <th>Price at Day</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    @foreach (var offer in Model.Offers)
+                    {
+                        <tr>
+                            <td>@offer.BeginDate.ToShortDateString()</td>
+                            <td>@offer.DateStop.ToShortDateString()</td>
+                            <td>@(offer.PriceAtDay) RSD.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <h4 class="text-light text-left font-weight-normal mt-4 mb-3">
+            Reservations
+            <i class="fas fa-caret-up mx-2 d-none caret-rt" data-toggle="collapse" data-target="#reservation"></i>
+            <i class="fas fa-caret-down mx-2 caret-rd" data-toggle="collapse" data-target="#reservation"></i>
+        </h4>
+        if (Model.Reservations.Count() > 0)
+        {
+            <div class="table-responsive collapse" id="reservation">
+                <table class="table table-bordered table-hover bg-light">
+                    <thead>
+                        <tr>
+                            <th>
+                                Begin Date
+                            </th>
+                            <th>Date Stop</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        @foreach (var reserv in Model.Reservations)
+                        {
+                            <tr class="text-danger font-weight-bold">
+                                <td>@reserv.BeginDate.ToShortDateString()</td>
+                                <td>@reserv.DateStop.ToShortDateString()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="row collapse" id="reservation">
+                <div class="alert alert-warning w-100 text-center p-4">
+                    We don't have any reservations for select Automobile!
+                </div>
+            </div>
+        }
+        <h3 class=" text-light text-center font-weight-normal">Add New Reservation</h3>
+
+        @Html.LabelFor(r => r.Reservation.BeginDate, new { @class = "mt-3 text-warning" })
+        @Html.TextBoxFor(r => r.Reservation.BeginDate, new { @class = "form-control py-2 begin-date", type = "date" })
+        @Html.ValidationMessageFor(r => r.Reservation.BeginDate)
+
+        @Html.LabelFor(r => r.Reservation.DateStop, new { @class = "mt-3 text-warning" })
+        @Html.TextBoxFor(r => r.Reservation.DateStop, new { @class = "form-control py-2 stop-date", type = "date" })
+        @Html.ValidationMessageFor(r => r.Reservation.DateStop)
+
+        @Html.TextBoxFor(r => r.Reservation.TotalPrice, new { @class = "form-control py-2 d-none", type = "number" })
+        @Html.ValidationMessageFor(r => r.Reservation.TotalPrice)
+
+        @Html.TextBoxFor(r => r.Reservation.AutomobileId, new { @class = "form-control py-2 id-auto d-none", type = "number" })
+        @Html.TextBoxFor(r => r.Reservation.UserId, new { @class = "form-control py-2 id-user d-none", type = "number" })
+
+        <button type="submit" class="btn btn-block bg-primary font-weight-bold mt-5">Add to Chart</button>
+    }
+</div>
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        function sortTable() {
+            let table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("table-body");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 0; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[0];
+                    y = rows[i + 1].getElementsByTagName("TD")[0];
+                    let dateX = new Date($(x).html());
+                    let dateY = new Date($(y).html());
+                    if ((dateX.getFullYear() > dateY.getFullYear()) || (dateX.getFullYear() == dateY.getFullYear() && dateX.getMonth() > dateY.getMonth()) ||
+                        (dateX.getFullYear() == dateY.getFullYear() && dateX.getMonth() == dateY.getMonth() && dateX.getDate() > dateY.getDate())) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+        function reverseTable() {
+            let table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("table-body");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 0; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[0];
+                    y = rows[i + 1].getElementsByTagName("TD")[0];
+                    let dateX = new Date($(x).html());
+                    let dateY = new Date($(y).html());
+                    if ((dateX.getFullYear() < dateY.getFullYear()) || (dateX.getFullYear() == dateY.getFullYear() && dateX.getMonth() < dateY.getMonth()) ||
+                        (dateX.getFullYear() == dateY.getFullYear() && dateX.getMonth() == dateY.getMonth() && dateX.getDate() < dateY.getDate())) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+        $(document).ready(function () {
+            let caretD = $(".caret-d");
+            let caretT = $(".caret-t");
+            $(caretD).click(function () {
+                $(caretD).addClass("d-none");
+                $(caretT).removeClass("d-none");
+            });
+            $(caretT).click(function () {
+                $(caretD).removeClass("d-none");
+                $(caretT).addClass("d-none");
+            });
+
+            $(".caret-rd").click(function () {
+                $(".caret-rd").addClass("d-none");
+                $(".caret-rt").removeClass("d-none");
+            });
+            $(".caret-rt").click(function () {
+                $(".caret-rd").removeClass("d-none");
+                $(".caret-rt").addClass("d-none");
+            });
+
+            let sorta = $(".sorta");
+            let sortb = $(".sortb");
+            $(sorta).click(function () {
+                sortTable();
+                $(sorta).addClass("d-none");
+                $(sortb).removeClass("d-none");
+            });
+            $(sortb).click(function () {
+                reverseTable();
+                $(sorta).removeClass("d-none");
+                $(sortb).addClass("d-none");
+            });
+
+            $(".id-auto").attr("value", "@Model.Reservation.Automobile.Id");
+            $(".id-user").attr("value", "@Model.Reservation.User.Id");
+
+
+            let beginD = $(".begin-date");
+            let stopD = $(".stop-date");
+        });
+    </script>
+}
+
